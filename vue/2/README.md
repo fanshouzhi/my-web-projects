@@ -1,40 +1,109 @@
-# 2
+#### Javascript
 
-This template should help get you started developing with Vue 3 in Vite.
+通过defineProps定义props，如:
 
-## Recommended IDE Setup
-
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
-
-## Type Support for `.vue` Imports in TS
-
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
-
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
-
-1. Disable the built-in TypeScript Extension
-    1) Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-    2) Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
+```ts
+const props = defineProps({
+    width:{
+        type:Number,
+        default:350
+    },
+    progressWidth:{
+        type:Number,
+        default:0
+    }
+})
+复制代码
 ```
 
-### Compile and Hot-Reload for Development
+通过computed方法定义计算属性:
 
-```sh
-npm run dev
+```ts
+const styleWidth = computed(() => props.width+'px');
+复制代码
 ```
 
-### Type-Check, Compile and Minify for Production
+依然是通过slot标签定义插槽:
 
-```sh
-npm run build
+```html
+<div class="ps-step-container">
+    <div class="ps-step-progress"></div>
+    <slot></slot>
+</div>
+复制代码
 ```
+
+通过defineEmits方法定义事件传递:
+
+- defineEmits注册事件名，方法通常是一个数组，传递多个事件名
+- 调用方法的返回值，然后将该事件向上传递
+
+```ts
+const emit = defineEmits(["on-click"]);
+const changeActive = () => {
+    emit("on-click");
+}
+复制代码
+```
+
+通过reactive定义响应式对象，它与ref方法的区别就是，通常我们使用ref方法来定义基本数据类型，而reactive方法则是定义多个对象:
+
+```ts
+const bool = ref(false);
+const state = reactive({
+    status: false,
+    list:[
+        {
+            label:"测试值",
+            value:1
+        }
+    ]
+})
+复制代码
+```
+
+浏览器控制台花式玩法:
+
+```js
+console.log("%c " + consoleText,"background:#0ca6dc;padding:4px 10px;border-radius:3px;color:#fff");
+复制代码
+```
+
+#### less
+
+动态绑定样式变量的写法有两种，第一种则是字符串属性名，第二种则是直接写变量名:
+
+```less
+width:v-bind("styleWidth");
+width:v-bind(styleProgressWidth);
+复制代码
+```
+
+::focus-visible选择器，表示键盘伪类焦点选择器，在规范中定义为:元素聚焦，同时浏览器认为聚焦轮廓应该显示。
+
+有时候我们希望键盘触发聚焦轮廓，而鼠标关注焦点则不触发轮廓，此时用以下一行CSS代码搞定。
+
+```css
+:focus:not(:focus-visible) {
+    outline: 0;
+}
+复制代码
+```
+
+属性选择器语法:
+
+```css
+[属性选择器] {
+    //CSS样式
+}
+//如:
+[disabled] {
+    background-color: @color;
+    color: @font_color;
+    cursor: not-allowed;
+}
+复制代码
+```
+
+其它知识点同前面示例。
+
