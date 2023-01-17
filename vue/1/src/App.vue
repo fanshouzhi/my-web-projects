@@ -1,47 +1,61 @@
 <script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+import { ref } from "vue";
+const imageURL = "https://www.eveningwater.com/my-web-projects/js/26/img/";
+const imageItems = ["1.jpg", "2.jpg", "3.jpg", "6.jpg", "7.jpg", "8.jpg"];
+const currentIndex = ref(0);
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
-
-  <main>
-    <TheWelcome />
-  </main>
+  <div
+    class="ec-panel"
+    v-for="(item, index) in imageItems"
+    :key="index + item"
+    :class="index === currentIndex ? 'active' : ''"
+    :style="{ backgroundImage: `url(${imageURL + item})` }"
+    @click="currentIndex = index"
+  >
+    girl{{ item.slice(0, 1) }}
+  </div>
 </template>
 
-<style scoped>
-header {
-  line-height: 1.5;
+<style lang="less">
+.base-flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
+body {
+  margin: 0;
+  height: 100vh;
+  width: 100vw;
+  background: linear-gradient(13deg, #b5d5ee 10%, #4096ef 90%);
+  .base-flex;
+  .app {
+    margin: 0;
+    font-family: Avenir, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    width: 90vw;
+    .base-flex;
+    .ec-panel {
+      .base-flex;
+      color: #fff;
+      margin: 10px;
+      padding: 10px;
+      font-size: 1.2rem;
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: 50%;
+      border-radius: 20px;
+      position: relative;
+      height: 90vh;
+      flex: 0.5 1;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.075, 0.82, 0.165, 1);
+      &.active {
+        flex: 5 1;
+      }
+    }
   }
 }
 </style>
